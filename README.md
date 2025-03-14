@@ -7,6 +7,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
   - [x] Tailwind CSS
   - [x] Page Router
   - [x] VsCode
+  - [x] Playwright
 - Features
   - [ ] get users
     - GitHub API to fetch -> URL_ADDRESS.github.com/users
@@ -46,6 +47,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
   - [ ] loading state
   - [ ] error handling
   - [ ] responsive design
+  - [ ] testing
 
 ## Getting Started
 
