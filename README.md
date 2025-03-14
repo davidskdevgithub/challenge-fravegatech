@@ -19,12 +19,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
     - use localStorage
     - use debounce or throttle
 - Components
-  - [ ] UserCard
+  - [x] UserCard
     - name
     - avatar
-    - link to detail page
+    - link to detail page //TODO
     - favorite icon
-  - [ ] UserList
+  - [x] UserList
     - list of UserCard
   - [ ] SearchBar
     - input
