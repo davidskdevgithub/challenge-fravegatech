@@ -1,0 +1,250 @@
+name: Continuous Deployment
+
+on:
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  initialize:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    outputs:
+      is_pr: ${{ steps.check-pr.outputs.is_pr }}
+      pr_number: ${{ steps.check-pr.outputs.pr_number }}
+      commit_sha: ${{ steps.event-info.outputs.commit_sha }}
+    steps:
+      - name: Get event info
+        id: event-info
+        run: |
+          echo "commit_sha=${{ github.event.workflow_run.head_sha }}" >> $GITHUB_OUTPUT
+
+      - name: Check if workflow ran on PR
+        id: check-pr
+        run: |
+          PR_INFO=$(curl -s -H "Authorization: token ${{ github.token }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.event.workflow_run.head_sha }}/pulls")
+          
+          if [ "$(echo $PR_INFO | jq length)" -gt 0 ]; then
+            echo "is_pr=true" >> $GITHUB_OUTPUT
+            echo "pr_number=$(echo $PR_INFO | jq -r '.[0].number')" >> $GITHUB_OUTPUT
+          else
+            echo "is_pr=false" >> $GITHUB_OUTPUT
+            echo "pr_number=0" >> $GITHUB_OUTPUT
+          fi
+
+  preview-deploy:
+    name: Deploy Preview
+    needs: initialize
+    if: ${{ needs.initialize.outputs.is_pr == 'true' }}
+    runs-on: ubuntu-latest
+    outputs:
+      preview_url: ${{ steps.deploy-preview.outputs.preview-url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.initialize.outputs.commit_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Deploy to Vercel (Preview)
+        id: deploy-preview
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./
+          vercel-args: '--confirm'
+
+  comment-pr:
+    name: Comment PR
+    needs: [initialize, preview-deploy]
+    if: ${{ needs.initialize.outputs.is_pr == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment PR with Preview URL
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+          message: |
+            🚀 Deployment previewed successfully!
+            Preview: ${{ needs.deploy-preview.outputs.preview_url }}
+          comment_tag: deployment
+          pr_number: ${{ needs.initialize.outputs.pr_number }}
+
+  e2e-test-preview:
+    name: E2E Tests on Preview
+    needs: [initialize, preview-deploy]
+    if: ${{ needs.initialize.outputs.is_pr == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.initialize.outputs.commit_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # - name: Install Playwright browsers
+      #   run: pnpm exec playwright install --with-deps
+
+      - name: Run E2E tests against preview
+        env:
+          BASE_URL: ${{ needs.deploy-preview.outputs.preview_url }}
+        # run: pnpm test:e2e
+        run: echo "E2E tests will be implemented soon" && exit 0
+
+  production-deploy:
+    name: Deploy Production
+    needs: initialize
+    if: ${{ needs.initialize.outputs.is_pr == 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.initialize.outputs.commit_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./
+          vercel-args: '--prod'
+
+  e2e-test-production:
+    name: E2E Tests on Production
+    needs: [initialize, production-deploy]
+    if: ${{ needs.initialize.outputs.is_pr == 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.initialize.outputs.commit_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # - name: Install Playwright browsers
+      #   run: pnpm exec playwright install --with-deps
+
+      - name: Run E2E tests against production
+        # env:
+        #   BASE_URL: "https://your-production-url.vercel.app"
+        # run: pnpm test:e2e
+        run: echo "E2E tests will be implemented soon" && exit 0
