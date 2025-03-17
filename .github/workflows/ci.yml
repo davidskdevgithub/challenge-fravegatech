@@ -118,8 +118,7 @@ jobs:
         run: pnpm install
 
       - name: Run unit tests with Vitest
-        # run: pnpm test:unit
-        run: echo "Unit tests will be implemented soon" && exit 0
+        run: pnpm test:unit
 
   build:
     needs: [lint, unit-test]
