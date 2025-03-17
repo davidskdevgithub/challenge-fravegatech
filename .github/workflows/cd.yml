@@ -98,10 +98,9 @@ jobs:
       - name: Comment PR with Preview URL
         uses: thollander/actions-comment-pull-request@v2
         with:
-          GITHUB_TOKEN: ${{ github.token }}
           message: |
             🚀 Deployment previewed successfully!
-            Preview: ${{ needs.deploy-preview.outputs.preview_url }}
+            Preview: ${{ needs.preview-deploy.outputs.preview_url || 'https://vercel.com/dashboard' }}
           comment_tag: deployment
           pr_number: ${{ needs.initialize.outputs.pr_number }}
 
@@ -149,7 +148,7 @@ jobs:
 
       - name: Run E2E tests against preview
         env:
-          BASE_URL: ${{ needs.deploy-preview.outputs.preview_url }}
+          BASE_URL: ${{ needs.preview-deploy.outputs.preview_url }}
         # run: pnpm test:e2e
         run: echo "E2E tests will be implemented soon" && exit 0
 
