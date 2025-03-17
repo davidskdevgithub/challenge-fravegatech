@@ -6,12 +6,12 @@
     - Tailwind CSS
     - Page router
   - [x] Push repo to GitHub
-  - [ ] Create a new project on Vercel
-  - [ ] Add secrets in GitHub
-  - [ ] Setup CI/CD
-  - [ ] Settings for VsCode
-  - [ ] Add new rules to ESLint
-  - [ ] Hostname for Next Images
+  - [x] Create a new project on Vercel
+  - [x] Add secrets in GitHub
+  - [x] Setup CI/CD
+  - [x] Settings for VsCode
+  - [x] Add new rules to ESLint
+  - [x] Hostname for Next Images
 
 ## Getting Started
 
