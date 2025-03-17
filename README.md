@@ -12,6 +12,47 @@
   - [x] Settings for VsCode
   - [x] Add new rules to ESLint
   - [x] Hostname for Next Images
+- Features
+  - [ ] get users
+    - GitHub API to fetch -> URL_ADDRESS.github.com/users
+  - [ ] get user detail
+    - GitHub API to fetch -> URL_ADDRESS.github.com/users/{username}
+  - [ ] implement search
+    - Github API to fetch -> URL_ADDRESS.github.com/search/users?q={term}
+    - use debounce or throttle
+  - [ ] implement favorite
+    - use localStorage
+    - use debounce or throttle
+- Components
+  - [ ] UserCard
+    - name
+    - avatar
+    - link to detail page //TODO
+    - favorite icon
+  - [ ] UserList
+    - list of UserCard
+  - [ ] SearchBar
+    - input
+    - button
+  - [ ] FavoriteIcon
+    - icon
+    - click to toggle favorite
+  - [ ] UserDetail
+    - name
+    - avatar
+    - link to GitHub profile
+    - favorite icon
+    - bio
+    - public repos
+    - etc
+- Take into account
+  - [ ] home need to use csr
+  - [ ] detail need to use ssr
+  - [ ] loading state
+  - [ ] error handling
+  - [ ] responsive design
+  - [ ] testing
+  - [ ] performance
 
 ## Getting Started
 
