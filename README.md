@@ -6,12 +6,53 @@
     - Tailwind CSS
     - Page router
   - [x] Push repo to GitHub
-  - [ ] Create a new project on Vercel
-  - [ ] Add secrets in GitHub
-  - [ ] Setup CI/CD
-  - [ ] Settings for VsCode
-  - [ ] Add new rules to ESLint
-  - [ ] Hostname for Next Images
+  - [x] Create a new project on Vercel
+  - [x] Add secrets in GitHub
+  - [x] Setup CI/CD
+  - [x] Settings for VsCode
+  - [x] Add new rules to ESLint
+  - [x] Hostname for Next Images
+- Features
+  - [ ] get users
+    - GitHub API to fetch -> URL_ADDRESS.github.com/users
+  - [ ] get user detail
+    - GitHub API to fetch -> URL_ADDRESS.github.com/users/{username}
+  - [ ] implement search
+    - Github API to fetch -> URL_ADDRESS.github.com/search/users?q={term}
+    - use debounce or throttle
+  - [ ] implement favorite
+    - use localStorage
+    - use debounce or throttle
+- Components
+  - [ ] UserCard
+    - name
+    - avatar
+    - link to detail page //TODO
+    - favorite icon
+  - [ ] UserList
+    - list of UserCard
+  - [ ] SearchBar
+    - input
+    - button
+  - [ ] FavoriteIcon
+    - icon
+    - click to toggle favorite
+  - [ ] UserDetail
+    - name
+    - avatar
+    - link to GitHub profile
+    - favorite icon
+    - bio
+    - public repos
+    - etc
+- Take into account
+  - [ ] home need to use csr
+  - [ ] detail need to use ssr
+  - [ ] loading state
+  - [ ] error handling
+  - [ ] responsive design
+  - [ ] testing
+  - [ ] performance
 
 ## Getting Started
 
