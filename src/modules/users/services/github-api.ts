@@ -1,4 +1,4 @@
-import { GitHubUser } from '../github-types';
+import { GitHubUser, GitHubUserDetail } from '../github-types';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 
@@ -19,6 +19,21 @@ export class GitHubService {
       return await response.json();
     } catch (error) {
       console.error('Failed to fetch GitHub users:', error);
+      throw error;
+    }
+  }
+
+  async getUserDetails(username: string): Promise<GitHubUserDetail> {
+    try {
+      const response = await fetch(`${GITHUB_API_BASE_URL}/users/${encodeURIComponent(username)}`);
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error(`Failed to fetch GitHub user details for ${username}:`, error);
       throw error;
     }
   }
