@@ -1,12 +1,30 @@
-import React from 'react';
 import { UserCard } from './user-card';
-import { GitHubUser } from '../github-types';
+import { useGitHubUsers } from '../hooks/useGitHubUsers';
 
-interface UserListProps {
-  users: GitHubUser[];
-}
+export const UserList: React.FC = () => {
+  const { users, isLoading, error } = useGitHubUsers();
 
-export const UserList: React.FC<UserListProps> = ({ users }) => {
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-500">Error loading users: {(error as Error).message}</p>
+        <button 
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   if (users.length === 0) {
     return (
