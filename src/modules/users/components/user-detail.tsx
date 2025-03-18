@@ -6,9 +6,7 @@ interface UserDetailProps {
   user?: GitHubUserDetail;
 }
 
-export const UserDetail: React.FC<UserDetailProps> = ({ 
-  user, 
-}) => {
+export const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
 
   if (!user) {
     return (
