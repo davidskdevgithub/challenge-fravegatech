@@ -12,8 +12,10 @@
   - [x] Settings for VsCode
   - [x] Add new rules to ESLint
   - [x] Hostname for Next Images
+  - [x] Vitest
+  - [x] React Query
 - Features
-  - [ ] get users
+  - [x] get users
     - GitHub API to fetch -> URL_ADDRESS.github.com/users
   - [ ] get user detail
     - GitHub API to fetch -> URL_ADDRESS.github.com/users/{username}
@@ -24,12 +26,12 @@
     - use localStorage
     - use debounce or throttle
 - Components
-  - [ ] UserCard
+  - [x] UserCard
     - name
     - avatar
     - link to detail page //TODO
     - favorite icon
-  - [ ] UserList
+  - [x] UserList
     - list of UserCard
   - [ ] SearchBar
     - input
