@@ -2,9 +2,9 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { GitHubUserDetail } from '../github-types';
 import githubService, { githubQueryKeys } from '../services/github-api';
 
-export const useGitHubUserDetails = (
+export const useGitHubUserDetails = <T = GitHubUserDetail>(
   username: string,
-  options?: Partial<UseQueryOptions<GitHubUserDetail, Error, GitHubUserDetail>>
+  options?: Partial<UseQueryOptions<GitHubUserDetail, Error, T>>
 ) => {
   const {
     data: user,

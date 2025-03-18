@@ -1,4 +1,4 @@
-import { GitHubUser } from '../github-types';
+import { GitHubUser, GitHubUserDetail } from '../github-types';
 
 export const mockUsers: GitHubUser[] = [
   {
@@ -65,3 +65,39 @@ export const mockUsers: GitHubUser[] = [
     'site_admin': false
   }
 ];
+
+export const mockUserDetail: GitHubUserDetail = {
+  login: 'testuser',
+  id: 1,
+  node_id: 'MDQ6VXNlcjE=',
+  avatar_url: 'https://example.com/avatar.png',
+  gravatar_id: '',
+  url: 'https://api.github.com/users/testuser',
+  html_url: 'https://github.com/testuser',
+  followers_url: 'https://api.github.com/users/testuser/followers',
+  following_url: 'https://api.github.com/users/testuser/following{/other_user}',
+  gists_url: 'https://api.github.com/users/testuser/gists{/gist_id}',
+  starred_url: 'https://api.github.com/users/testuser/starred{/owner}{/repo}',
+  subscriptions_url: 'https://api.github.com/users/testuser/subscriptions',
+  organizations_url: 'https://api.github.com/users/testuser/orgs',
+  repos_url: 'https://api.github.com/users/testuser/repos',
+  events_url: 'https://api.github.com/users/testuser/events{/privacy}',
+  received_events_url: 'https://api.github.com/users/testuser/received_events',
+  type: 'User',
+  user_view_type: 'public',
+  site_admin: false,
+  name: 'Test User',
+  company: 'Test Company',
+  blog: 'https://testuser.dev',
+  location: 'Test City',
+  email: 'test@example.com',
+  hireable: true,
+  bio: 'A test user',
+  twitter_username: 'testuser',
+  public_repos: 30,
+  public_gists: 15,
+  followers: 100,
+  following: 50,
+  created_at: '2011-01-25T18:44:36Z',
+  updated_at: '2023-01-25T18:44:36Z'
+};
