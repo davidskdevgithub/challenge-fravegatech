@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { UserCard } from '../components';
-import { GitHubUser } from '../github-types';
-import { mockUsers } from '../mocks/github-users-mock';
+import { UserCard } from '../user-card';
+import { GitHubUser } from '../../github-types';
+import { mockUsers } from '../../mocks/github-users-mock';
 
 // Mock the next/image component
 vi.mock('next/image', () => ({
