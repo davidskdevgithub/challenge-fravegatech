@@ -14,8 +14,6 @@ export const useGitHubUsers = <T = GitHubUser[]>(
     queryKey: githubQueryKeys.users(),
     queryFn: () => githubService.getUsers(),
     ...options,
-    // GitHub users change infrequently, so we can set a longer staleTime
-    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   return {
