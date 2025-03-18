@@ -1,5 +1,4 @@
 import { UserList } from '../components';
-import { mockUsers } from '../mocks/github-users-mock';
 
 export default function UsersPage() {
   return (
@@ -7,7 +6,7 @@ export default function UsersPage() {
       <h1 className="text-2xl font-bold mb-6" data-testid="page-title">
         GitHub Users
       </h1>
-      <UserList users={mockUsers} />
+      <UserList />
     </main> 
   );
 }
