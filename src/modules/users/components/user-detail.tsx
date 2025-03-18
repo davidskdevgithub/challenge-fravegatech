@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { GitHubUserDetail } from '../github-types';
+import { UserFavorite } from './user-favorite';
 
 interface UserDetailProps {
   user?: GitHubUserDetail;
@@ -47,15 +48,7 @@ export const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
               >
                 {user.login}
               </h1>
-              <button 
-                className="ml-4 text-2xl focus:outline-none"
-                aria-label={'Add to favorites'}
-                data-testid="favorite-button"
-              >
-                <span className={'text-gray-400 hover:text-yellow-500'}>
-                  {'☆'}
-                </span>
-              </button>
+              <UserFavorite username={user.login} className="ml-4" />
             </div>
             
             <div className="text-gray-300 mb-2">

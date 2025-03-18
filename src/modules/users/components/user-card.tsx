@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { GitHubUser } from '../github-types';
+import { UserFavorite } from './user-favorite';
 
 interface UserCardProps {
   user: GitHubUser;
@@ -36,13 +37,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
           </div>
         </Link>
         
-        <button 
-          className="text-2xl focus:outline-none"
-          aria-label="Add to favorites"
-          data-testid="favorite-button"
-        >
-          <span className="text-gray-400 hover:text-yellow-500">☆</span>
-        </button>
+        <UserFavorite username={name} />
       </div>
     </div>
   );
