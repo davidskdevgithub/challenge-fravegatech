@@ -1,10 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
-import { GitHubUserDetail } from '../github-types';
+import { GitHubUser } from '../github-types';
 import { UserFavorite } from './user-favorite';
 
 interface UserDetailProps {
-  user?: GitHubUserDetail;
+  user?: GitHubUser;
 }
 
 export const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
@@ -186,7 +186,7 @@ export const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
                   Following ({user.following})
                 </a>
               </li>
-              {user.public_gists > 0 && (
+              {user.public_gists && (
                 <li>
                   <a 
                     href={`https://gist.github.com/${user.login}`} 

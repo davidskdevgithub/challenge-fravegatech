@@ -1,8 +1,12 @@
 import { UserCard } from './user-card';
 import { useGitHubUsers } from '../hooks/useGitHubUsers';
 
-export const UserList: React.FC = () => {
-  const { users, isLoading, error, refetch } = useGitHubUsers();
+interface UserListProps {
+  searchQuery: string;
+}
+
+export const UserList: React.FC<UserListProps> = ({ searchQuery }) => {
+  const { users, isLoading, error, refetch } = useGitHubUsers(searchQuery);
 
   if (isLoading) {
     return (

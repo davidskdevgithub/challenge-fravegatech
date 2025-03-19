@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { UserDetail } from '../user-detail';
-import { GitHubUserDetail } from '../../github-types';
+import { GitHubUser } from '../../github-types';
 import { mockUserDetail } from '../../mocks/github-users-mock';
 
 // Mock the next/image component
@@ -18,7 +18,7 @@ vi.mock('next/image', () => ({
 }));
 
 describe('UserDetail', () => {
-  const mockUser: GitHubUserDetail = mockUserDetail;
+  const mockUser: GitHubUser = mockUserDetail;
 
   it('renders the user detail with correct information', () => {
     render(<UserDetail user={mockUser} />);

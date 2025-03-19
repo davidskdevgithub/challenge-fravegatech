@@ -1,4 +1,4 @@
-import { GitHubUser, GitHubUserDetail } from '../github-types';
+import { GitHubUser } from '../github-types';
 
 export const mockUsers: GitHubUser[] = [
   {
@@ -66,7 +66,7 @@ export const mockUsers: GitHubUser[] = [
   }
 ];
 
-export const mockUserDetail: GitHubUserDetail = {
+export const mockUserDetail: GitHubUser = {
   login: 'testuser',
   id: 1,
   node_id: 'MDQ6VXNlcjE=',

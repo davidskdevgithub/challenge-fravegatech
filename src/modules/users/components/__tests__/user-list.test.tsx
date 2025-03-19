@@ -50,12 +50,10 @@ describe('UserList', () => {
       refetch: vi.fn(),
     });
     
-    render(<UserList />, { wrapper: createQueryWrapper() });
+    render(<UserList searchQuery="" />, { wrapper: createQueryWrapper() });
     
     // Check if loading indicator is shown
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
-    // Alternatively, if you use a specific test ID:
-    // expect(screen.getByTestId('loading-indicator')).toBeInTheDocument();
   });
 
   it('should render users when data is loaded', async () => {
@@ -67,7 +65,7 @@ describe('UserList', () => {
       refetch: vi.fn(),
     });
     
-    render(<UserList />, { wrapper: createQueryWrapper() });
+    render(<UserList searchQuery="" />, { wrapper: createQueryWrapper() });
     
     // Check if all users are rendered
     mockUsers.forEach(user => {
@@ -85,7 +83,7 @@ describe('UserList', () => {
       refetch: vi.fn(),
     });
     
-    render(<UserList />, { wrapper: createQueryWrapper() });
+    render(<UserList searchQuery="" />, { wrapper: createQueryWrapper() });
     
     // Check if error message is shown
     expect(screen.getByText(/Error loading users/i)).toBeInTheDocument();
@@ -105,7 +103,7 @@ describe('UserList', () => {
       refetch: vi.fn(),
     });
     
-    render(<UserList />, { wrapper: createQueryWrapper() });
+    render(<UserList searchQuery="" />, { wrapper: createQueryWrapper() });
     
     // Check if empty state message is shown
     expect(screen.getByText(/No users found/i)).toBeInTheDocument();
@@ -123,7 +121,7 @@ describe('UserList', () => {
       refetch: mockRefetch,
     });
     
-    render(<UserList />, { wrapper: createQueryWrapper() });
+    render(<UserList searchQuery="" />, { wrapper: createQueryWrapper() });
     
     // Find and click the retry button
     const retryButton = screen.getByRole('button', { name: /retry/i });
@@ -131,5 +129,21 @@ describe('UserList', () => {
     
     // Verify refetch was called
     expect(mockRefetch).toHaveBeenCalledTimes(1);
+  });
+  
+  it('should pass search query to useGitHubUsers hook', () => {
+    // Mock hook to return empty array
+    mockUseGitHubUsers.mockReturnValue({
+      users: [],
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+    });
+    
+    const searchQuery = 'test query';
+    render(<UserList searchQuery={searchQuery} />, { wrapper: createQueryWrapper() });
+    
+    // Verify that the hook was called with the correct search query
+    expect(mockUseGitHubUsers).toHaveBeenCalledWith(searchQuery);
   });
 });
