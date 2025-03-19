@@ -35,6 +35,8 @@ export const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
               src={user.avatar_url}
               alt={`${user.login}'s avatar`}
               fill
+              priority
+              sizes="(max-width: 768px) 8rem, 8rem"
               className="rounded-full object-cover"
               data-testid="user-avatar"
             />
