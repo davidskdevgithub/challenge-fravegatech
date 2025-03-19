@@ -14,17 +14,17 @@
   - [x] Hostname for Next Images
   - [x] Vitest
   - [x] React Query
+  - [ ] Playwright
 - Features
   - [x] get users
     - GitHub API to fetch -> URL_ADDRESS.github.com/users
-  - [ ] get user detail
+  - [x] get user detail
     - GitHub API to fetch -> URL_ADDRESS.github.com/users/{username}
-  - [ ] implement search
+  - [x] implement search
     - Github API to fetch -> URL_ADDRESS.github.com/search/users?q={term}
     - use debounce or throttle
-  - [ ] implement favorite
+  - [x] implement favorite
     - use localStorage
-    - use debounce or throttle
 - Components
   - [x] UserCard
     - name
@@ -33,13 +33,12 @@
     - favorite icon
   - [x] UserList
     - list of UserCard
-  - [ ] SearchBar
+  - [x] SearchBar
     - input
-    - button
-  - [ ] FavoriteIcon
+  - [x] FavoriteIcon
     - icon
     - click to toggle favorite
-  - [ ] UserDetail
+  - [x] UserDetail
     - name
     - avatar
     - link to GitHub profile
@@ -48,11 +47,11 @@
     - public repos
     - etc
 - Take into account
-  - [ ] home need to use csr
-  - [ ] detail need to use ssr
-  - [ ] loading state
-  - [ ] error handling
-  - [ ] responsive design
+  - [x] home need to use csr
+  - [x] detail need to use ssr
+  - [x] loading state
+  - [x] error handling
+  - [x] responsive design
   - [ ] testing
   - [ ] performance
 
