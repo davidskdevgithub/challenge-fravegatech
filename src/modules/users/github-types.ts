@@ -22,8 +22,8 @@ export interface GitHubUser {
   company?: string;
   blog?: string;
   location?: string;
-  email?: string | null;
-  hireable?: boolean | null;
+  email?: string;
+  hireable?: boolean;
   bio?: string;
   twitter_username?: string;
   public_repos?: number;
