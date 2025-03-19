@@ -24,6 +24,8 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
               src={avatar_url}
               alt={`${name}'s avatar`}
               fill
+              priority
+              sizes="(max-width: 768px) 4rem, 4rem"
               className="rounded-full object-cover"
               data-testid="user-avatar"
             />
