@@ -18,6 +18,7 @@ jobs:
       is_pr: ${{ steps.check-pr.outputs.is_pr }}
       pr_number: ${{ steps.check-pr.outputs.pr_number }}
       commit_sha: ${{ steps.event-info.outputs.commit_sha }}
+      is_main: ${{ steps.check-branch.outputs.is_main }}
     steps:
       - name: Get event info
         id: event-info
@@ -37,11 +38,23 @@ jobs:
             echo "is_pr=false" >> $GITHUB_OUTPUT
             echo "pr_number=0" >> $GITHUB_OUTPUT
           fi
+          
+      - name: Check if workflow ran on main branch
+        id: check-branch
+        run: |
+          BRANCH_NAME=$(curl -s -H "Authorization: token ${{ github.token }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.event.workflow_run.head_sha }}" | jq -r '.commit.message' | grep -o "branch: [^ ]*" | cut -d' ' -f2)
+          
+          if [ "$BRANCH_NAME" == "main" ]; then
+            echo "is_main=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_main=false" >> $GITHUB_OUTPUT
+          fi
 
   preview-deploy:
     name: Deploy Preview
     needs: initialize
-    if: ${{ needs.initialize.outputs.is_pr == 'true' }}
+    if: ${{ needs.initialize.outputs.is_pr == 'true' && needs.initialize.outputs.is_main == 'false' }}
     runs-on: ubuntu-latest
     outputs:
       preview_url: ${{ steps.deploy-preview.outputs.preview-url }}
@@ -92,7 +105,7 @@ jobs:
   comment-pr:
     name: Comment PR
     needs: [initialize, preview-deploy]
-    if: ${{ needs.initialize.outputs.is_pr == 'true' }}
+    if: ${{ needs.initialize.outputs.is_pr == 'true' && needs.initialize.outputs.is_main == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Comment PR with Preview URL
@@ -107,7 +120,7 @@ jobs:
   e2e-test-preview:
     name: E2E Tests on Preview
     needs: [initialize, preview-deploy]
-    if: ${{ needs.initialize.outputs.is_pr == 'true' }}
+    if: ${{ needs.initialize.outputs.is_pr == 'true' && needs.initialize.outputs.is_main == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -155,7 +168,7 @@ jobs:
   production-deploy:
     name: Deploy Production
     needs: initialize
-    if: ${{ needs.initialize.outputs.is_pr == 'false' }}
+    if: ${{ needs.initialize.outputs.is_pr == 'false' || needs.initialize.outputs.is_main == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -203,7 +216,7 @@ jobs:
   e2e-test-production:
     name: E2E Tests on Production
     needs: [initialize, production-deploy]
-    if: ${{ needs.initialize.outputs.is_pr == 'false' }}
+    if: ${{ needs.initialize.outputs.is_pr == 'false' || needs.initialize.outputs.is_main == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
