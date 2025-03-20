@@ -17,6 +17,15 @@ vi.mock('next/image', () => ({
   }
 }));
 
+// Mock the UserFavorite component
+vi.mock('../user-favorite', () => ({
+  UserFavorite: ({ username, className }: { username: string; className?: string }) => (
+    <button data-testid="favorite-button" className={className}>
+      Favorite {username}
+    </button>
+  )
+}));
+
 describe('UserDetail', () => {
   const mockUser: GitHubUser = mockUserDetail;
 
@@ -37,18 +46,32 @@ describe('UserDetail', () => {
     
     // Check if the GitHub link is present and has the correct href
     const githubLink = screen.getByTestId('github-link');
-    expect(githubLink.getAttribute('href')).toBe(mockUser.html_url);
+    expect(githubLink.getAttribute('href')).toBe(`https://github.com/${mockUser.login}`);
     
     // Check if bio is displayed when available
     if (mockUser.bio) {
       expect(screen.getByText(mockUser.bio)).toBeDefined();
     }
     
-    // Check if profile info section contains key information
-    expect(screen.getByText(`User ID: ${mockUser.id}`)).toBeDefined();
-    expect(screen.getByText(`Public Repos: ${mockUser.public_repos}`)).toBeDefined();
-    expect(screen.getByText(`Followers: ${mockUser.followers}`)).toBeDefined();
-    expect(screen.getByText(`Following: ${mockUser.following}`)).toBeDefined();
+    // Check if stats section contains key information
+    expect(screen.getByText('Repositories')).toBeDefined();
+    expect(screen.getByText('Gists')).toBeDefined();
+    expect(screen.getByText('Followers')).toBeDefined();
+    expect(screen.getByText('Following')).toBeDefined();
+    
+    // Check if the stats values are displayed
+    if (mockUser.public_repos !== undefined) {
+      expect(screen.getByText(mockUser.public_repos.toString())).toBeDefined();
+    }
+    if (mockUser.public_gists !== undefined) {
+      expect(screen.getByText(mockUser.public_gists.toString())).toBeDefined();
+    }
+    if (mockUser.followers !== undefined) {
+      expect(screen.getByText(mockUser.followers.toString())).toBeDefined();
+    }
+    if (mockUser.following !== undefined) {
+      expect(screen.getByText(mockUser.following.toString())).toBeDefined();
+    }
   });
 
   it('renders "User not found" when no user is provided', () => {
@@ -68,7 +91,12 @@ describe('UserDetail', () => {
     
     // Check if company is displayed when available
     if (mockUser.company) {
-      expect(screen.getByText(mockUser.company)).toBeDefined();
+      // Company is now displayed in the Organizations section
+      const orgs = mockUser.company.split(',');
+      for (const org of orgs) {
+        expect(screen.getByText(org.trim())).toBeDefined();
+      }
+      expect(screen.getByText('Organizations')).toBeDefined();
     }
     
     // Check if location is displayed when available
@@ -93,29 +121,12 @@ describe('UserDetail', () => {
     }
   });
 
-  it('formats dates correctly', () => {
+  it('displays membership duration information', () => {
     render(<UserDetail user={mockUser} />);
     
-    // Check if created_at date is formatted correctly
+    // Check if membership duration is displayed
     if (mockUser.created_at) {
-      const date = new Date(mockUser.created_at);
-      const formattedDate = date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      });
-      expect(screen.getByText(`Created: ${formattedDate}`)).toBeDefined();
-    }
-    
-    // Check if updated_at date is formatted correctly
-    if (mockUser.updated_at) {
-      const date = new Date(mockUser.updated_at);
-      const formattedDate = date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      });
-      expect(screen.getByText(`Updated: ${formattedDate}`)).toBeDefined();
+      expect(screen.getByText(/GitHub member for/)).toBeDefined();
     }
   });
 });
