@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+
 import { UserDetail } from '../components/user-detail';
 import { useGitHubUserDetails } from '../hooks/useGitHubUserDetails';
 
@@ -38,8 +40,9 @@ export default function UserDetailPage({ username }: UserDetailPageProps) {
   
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link href="/" className="inline-block mb-6 text-blue-500 hover:underline">
-        &larr; Back to users
+      <Link href="/" className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors">
+        <ArrowLeft className="h-5 w-5 mr-2" />
+        <span>Back to users</span>
       </Link>
       
       <UserDetail 
