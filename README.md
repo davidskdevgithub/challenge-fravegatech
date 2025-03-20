@@ -15,6 +15,7 @@
   - [x] Vitest
   - [x] React Query
   - [ ] Playwright
+  - [x] Lucide React
 - Features
   - [x] get users
     - GitHub API to fetch -> URL_ADDRESS.github.com/users
