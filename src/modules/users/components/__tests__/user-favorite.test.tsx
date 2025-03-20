@@ -8,6 +8,16 @@ vi.mock('../../hooks/useFavorite', () => ({
   useFavorite: vi.fn()
 }));
 
+// Mock the Lucide React Star component
+vi.mock('lucide-react', () => ({
+  Star: (props: { className?: string }) => (
+    <svg 
+      data-testid="star-icon" 
+      className={props.className || ''}
+    ></svg>
+  )
+}));
+
 // Import the mocked hook
 import { useFavorite } from '../../hooks/useFavorite';
 
@@ -16,29 +26,6 @@ describe('UserFavorite', () => {
   
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-  
-  it('renders non-favorite state correctly', () => {
-    // Mock the hook to return non-favorite state
-    (useFavorite as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      isFavorite: false,
-      toggleFavorite: mockToggleFavorite
-    });
-    
-    render(<UserFavorite username="testuser" />);
-    
-    // Check if the button has the correct aria-label
-    const favoriteButton = screen.getByTestId('favorite-button');
-    expect(favoriteButton.getAttribute('aria-label')).toBe('Add to favorites');
-    
-    // Check if the non-favorite star (☆) is displayed
-    const starIcon = favoriteButton.querySelector('span');
-    expect(starIcon?.textContent).toBe('☆');
-    
-    // Check if the non-favorite styling is applied - using a more specific check
-    expect(starIcon?.className.split(' ')).toContain('text-gray-400');
-    // Make sure it doesn't have the exact 'text-yellow-500' class (ignoring hover states)
-    expect(starIcon?.className.split(' ')).not.toContain('text-yellow-500');
   });
   
   it('renders favorite state correctly', () => {
@@ -54,13 +41,29 @@ describe('UserFavorite', () => {
     const favoriteButton = screen.getByTestId('favorite-button');
     expect(favoriteButton.getAttribute('aria-label')).toBe('Remove from favorites');
     
-    // Check if the favorite star (★) is displayed
-    const starIcon = favoriteButton.querySelector('span');
-    expect(starIcon?.textContent).toBe('★');
+    // Check if the star icon has the correct styling
+    const starIcon = screen.getByTestId('star-icon');
+    expect(starIcon).toHaveClass('text-yellow-400');
+    expect(starIcon).toHaveClass('fill-yellow-400');
+  });
+  
+  it('renders non-favorite state correctly', () => {
+    // Mock the hook to return non-favorite state
+    (useFavorite as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      isFavorite: false,
+      toggleFavorite: mockToggleFavorite
+    });
     
-    // Check if the favorite styling is applied
-    expect(starIcon?.className.split(' ')).toContain('text-yellow-500');
-    expect(starIcon?.className.split(' ')).not.toContain('text-gray-400');
+    render(<UserFavorite username="testuser" />);
+    
+    // Check if the button has the correct aria-label
+    const favoriteButton = screen.getByTestId('favorite-button');
+    expect(favoriteButton.getAttribute('aria-label')).toBe('Add to favorites');
+    
+    // Check if the star icon has the correct styling
+    const starIcon = screen.getByTestId('star-icon');
+    expect(starIcon).toHaveClass('text-gray-400');
+    expect(starIcon).not.toHaveClass('fill-yellow-400');
   });
   
   it('calls toggleFavorite when clicked', () => {
