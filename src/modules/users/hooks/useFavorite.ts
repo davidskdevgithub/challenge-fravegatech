@@ -1,33 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
+import { useFavoritesStore } from '../store/favoritesStore';
 
 export const useFavorite = (username: string) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const isFavorite = useFavoritesStore(state => state.isFavorite(username));
   
-  // Load favorite status from localStorage on component mount
-  useEffect(() => {
-    // Only run in browser environment
-    if (typeof window !== 'undefined') {
-      const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
-      setIsFavorite(!!favorites[username]);
-    }
+  const toggleFavorite = useCallback(() => {
+    useFavoritesStore.getState().toggleFavorite(username);
   }, [username]);
-  
-  const toggleFavorite = () => {
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
-    
-    // Toggle favorite status
-    const newFavoriteStatus = !isFavorite;
-    
-    if (newFavoriteStatus) {
-      favorites[username] = true;
-    } else {
-      delete favorites[username];
-    }
-    
-    // Save to localStorage
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    setIsFavorite(newFavoriteStatus);
-  };
 
   return { isFavorite, toggleFavorite };
 };

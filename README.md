@@ -16,6 +16,7 @@
   - [x] React Query
   - [ ] Playwright
   - [x] Lucide React
+  - [x] Zustand
 - Features
   - [x] get users
     - GitHub API to fetch -> URL_ADDRESS.github.com/users
@@ -25,7 +26,7 @@
     - Github API to fetch -> URL_ADDRESS.github.com/search/users?q={term}
     - use debounce or throttle
   - [x] implement favorite
-    - use localStorage
+    - use state management
 - Components
   - [x] UserCard
     - name
