@@ -14,33 +14,36 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
   return (
     <div 
-      className="bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      className="relative bg-gray-900 rounded-xl overflow-hidden group"
       data-testid="user-card"
     >
-      <div className="p-4 flex items-center space-x-4">
-        <Link href={`/users/${name}`} className="flex items-center space-x-4 flex-grow">
-          <div className="relative w-16 h-16 flex-shrink-0">
-            <Image
-              src={avatar_url}
-              alt={`${name}'s avatar`}
-              fill
-              priority
-              sizes="(max-width: 768px) 4rem, 4rem"
-              className="rounded-full object-cover"
-              data-testid="user-avatar"
-            />
-          </div>
-          
-          <div className="flex-grow">
-            <h3 
-              className="text-lg font-semibold text-gray-100"
-              data-testid="user-name"
-            >{name}</h3>
-          </div>
-        </Link>
-        
+      <div className="absolute top-3 right-3 z-10">
         <UserFavorite username={name} />
       </div>
+      <Link href={`/users/${name}`} className="flex flex-col items-stretch">
+        <div className="p-6">
+          <div className="flex flex-col items-center text-center">
+              <div className="relative w-24 h-24 mb-4">
+                <Image
+                  src={avatar_url || '/placeholder.svg'}
+                  alt={`${name}'s avatar`}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 6rem, 6rem"
+                  className="rounded-full object-cover border-4 border-gray-800 group-hover:border-purple-500 transition-all duration-300"
+                  data-testid="user-avatar"
+                />
+              </div>
+
+              <h3 
+                className="text-xl font-semibold mb-2"
+                data-testid="user-name"
+              >{name}</h3>
+          </div>
+        </div>
+      </Link>
+
+      <div className="h-1 w-full bg-gradient-to-r from-purple-500 to-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
     </div>
   );
 };

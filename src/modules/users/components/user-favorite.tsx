@@ -1,4 +1,5 @@
 import { useFavorite } from '../hooks/useFavorite';
+import { Star } from 'lucide-react';
 
 interface UserFavoriteProps {
   username: string;
@@ -10,14 +11,15 @@ export const UserFavorite: React.FC<UserFavoriteProps> = ({ username, className 
 
   return (
     <button 
-      className={`text-2xl focus:outline-none ${className}`}
+      className={`p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors duration-200 ${className}`}
       aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
       data-testid="favorite-button"
       onClick={toggleFavorite}
     >
-      <span className={`${isFavorite ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'}`}>
-        {isFavorite ? '★' : '☆'}
-      </span>
+      <Star
+        className={`h-5 w-5 ${isFavorite ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`}
+        data-testid="star-icon"
+      />
     </button>
   );
 };
