@@ -26,11 +26,17 @@ describe('UserFavorite', () => {
   
   beforeEach(() => {
     vi.clearAllMocks();
+    
+    // Reset the mock implementation for each test
+    (useFavorite as ReturnType<typeof vi.fn>).mockImplementation(() => ({
+      isFavorite: false,
+      toggleFavorite: mockToggleFavorite
+    }));
   });
   
   it('renders favorite state correctly', () => {
     // Mock the hook to return favorite state
-    (useFavorite as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    (useFavorite as ReturnType<typeof vi.fn>).mockReturnValue({
       isFavorite: true,
       toggleFavorite: mockToggleFavorite
     });
@@ -49,7 +55,7 @@ describe('UserFavorite', () => {
   
   it('renders non-favorite state correctly', () => {
     // Mock the hook to return non-favorite state
-    (useFavorite as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    (useFavorite as ReturnType<typeof vi.fn>).mockReturnValue({
       isFavorite: false,
       toggleFavorite: mockToggleFavorite
     });
@@ -68,7 +74,7 @@ describe('UserFavorite', () => {
   
   it('calls toggleFavorite when clicked', () => {
     // Mock the hook
-    (useFavorite as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    (useFavorite as ReturnType<typeof vi.fn>).mockReturnValue({
       isFavorite: false,
       toggleFavorite: mockToggleFavorite
     });
@@ -85,7 +91,7 @@ describe('UserFavorite', () => {
   
   it('applies custom className when provided', () => {
     // Mock the hook
-    (useFavorite as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    (useFavorite as ReturnType<typeof vi.fn>).mockReturnValue({
       isFavorite: false,
       toggleFavorite: mockToggleFavorite
     });
@@ -99,7 +105,7 @@ describe('UserFavorite', () => {
   
   it('passes the correct username to useFavorite hook', () => {
     // Mock the hook
-    (useFavorite as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    (useFavorite as ReturnType<typeof vi.fn>).mockReturnValue({
       isFavorite: false,
       toggleFavorite: mockToggleFavorite
     });
